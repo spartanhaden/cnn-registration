@@ -115,7 +115,9 @@ def checkboard(I1, I2, n=7):
     assert I1.shape == I2.shape
     height, width, channels = I1.shape
     hi, wi = height/n, width/n
-    outshape = (hi*n, wi*n, channels)
+    outshape = (int(np.ceil(I1.shape[0] / float(n)) * n),
+                int(np.ceil(I1.shape[1] / float(n)) * n),
+                I1.shape[2])
 
     out_image = np.zeros(outshape, dtype='uint8')
     for i in range(n):
@@ -125,9 +127,9 @@ def checkboard(I1, I2, n=7):
             w = wi * j
             w1 = w + wi
             if (i-j)%2 == 0:
-                out_image[h:h1, w:w1, :] = I1[h:h1, w:w1, :]
+                out_image[int(h):int(h1), int(w):int(w1), :] = I1[int(h):int(h1), int(w):int(w1), :]
             else:
-                out_image[h:h1, w:w1, :] = I2[h:h1, w:w1, :]
+                out_image[int(h):int(h1), int(w):int(w1), :] = I2[int(h):int(h1), int(w):int(w1), :]
 
     return out_image
 
