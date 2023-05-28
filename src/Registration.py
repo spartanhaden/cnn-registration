@@ -11,6 +11,8 @@ from lap import lapjv
 from utils.shape_context import ShapeContext
 import matplotlib.pyplot as plt
 
+tf.compat.v1.disable_eager_execution()
+
 class CNN(object):
     def __init__(self):
         self.height = 224
@@ -29,7 +31,7 @@ class CNN(object):
         self.beta = 2.0
         self.lambd = 0.5
 
-        self.cnnph = tf.placeholder("float", [2, 224, 224, 3])
+        self.cnnph = tf.compat.v1.placeholder("float", [2, 224, 224, 3])
         self.vgg = VGG16mo()
         self.vgg.build(self.cnnph)
         self.SC = ShapeContext()
@@ -55,7 +57,7 @@ class CNN(object):
         IX = np.expand_dims(IX, axis=0)
         IY = np.expand_dims(IY, axis=0)
         cnn_input = np.concatenate((IX, IY), axis=0)
-        with tf.Session() as sess:
+        with tf.compat.v1.Session() as sess:
             feed_dict = {self.cnnph: cnn_input}
             D1, D2, D3 = sess.run([
                 self.vgg.pool3, self.vgg.pool4, self.vgg.pool5_1
